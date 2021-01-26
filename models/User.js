@@ -3,7 +3,11 @@ const sequelize = require('../config/connection');
 const bcrypt = require('bcrypt');
 
 // create our User Model
-class User extends Model {}
+class User extends Model {
+    checkPassword(loginPw) {
+        return bcrypt.compareSync(loginPw, this.password)
+    }
+}
 
 // define table columns and config
 User.init(
@@ -48,9 +52,9 @@ User.init(
                 newUserData.password = await bcrypt.hash(newUserData.password, 10);
                 return newUserData
             },
-            async beforeUpdate(oldUserData) {
-                oldUserData.password = await bcrypt.hash(oldUserData.password, 10);
-                return oldUserData
+            async beforeUpdate(updatedUserData) {
+                updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
+                return updatedUserData
             }
         },
         //pass in ourimported sequelize connection (the direct connection to our db)
