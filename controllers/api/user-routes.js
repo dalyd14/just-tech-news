@@ -56,7 +56,7 @@ router.get('/:id', (req, res) => {
 });
 
 // POST
-router.post('/', withAuth, (req, res) => {
+router.post('/', (req, res) => {
     User.create({
         username: req.body.username,
         email: req.body.email,
@@ -82,6 +82,7 @@ router.post('/login', (req, res) => {
             email: req.body.email
         }
     }).then(dbUserData => {
+        console.log(dbUserData.id)
         if(!dbUserData) {
             res.status(400).json({message: 'No user found with that email address.'});
             return;
